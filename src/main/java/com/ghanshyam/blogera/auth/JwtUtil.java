@@ -1,5 +1,7 @@
-package com.ghanshyam.blogera;
+package com.ghanshyam.blogera.auth;
 
+import com.ghanshyam.blogera.user.AppUser;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -22,7 +24,7 @@ public class JwtUtil {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
-                .compact();
+                .compact();  // convert to string (JWT)
     }
 
     public String extractUsername(String token) {
@@ -47,5 +49,14 @@ public class JwtUtil {
                 .getBody()
                 .getExpiration()
                 .before(new Date());
+    }
+
+    // helper for validation / parsing
+    public Claims parseToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)   // throws if bad/expired
+                .getBody();
     }
 }

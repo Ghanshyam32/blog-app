@@ -1,9 +1,12 @@
 package com.ghanshyam.blogera.blog;
 
+import com.ghanshyam.blogera.dto.PostRequest;
+import com.ghanshyam.blogera.dto.PostResponse;
 import com.ghanshyam.blogera.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ public class BlogController {
     BlogService blogService;
 
     @GetMapping("/blogs")
-    public List<Blog> findAll() {
+    public List<PostResponse> findAll() {
         return blogService.getAllBlog();
     }
 
@@ -27,9 +30,10 @@ public class BlogController {
     }
 
     @PostMapping("/blogs/post")
-    public ResponseEntity<Blog> postBlog(@RequestBody Blog blog) {
-        blogService.postBlog(blog);
-        return new ResponseEntity<>(blog, HttpStatus.OK);
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> createBlog(@RequestBody PostRequest postRequest) {
+        blogService.createBlog(postRequest);
+        return new ResponseEntity<>("Your blog has been successfully posted!", HttpStatus.OK);
     }
 
     @DeleteMapping("/blogs/delete/{id}")

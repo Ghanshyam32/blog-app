@@ -1,5 +1,8 @@
-package com.ghanshyam.blogera;
+package com.ghanshyam.blogera.config;
 
+import com.ghanshyam.blogera.user.AppUser;
+import com.ghanshyam.blogera.user.AppUserRepository;
+import com.ghanshyam.blogera.user.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

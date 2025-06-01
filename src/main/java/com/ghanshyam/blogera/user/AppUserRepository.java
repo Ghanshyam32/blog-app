@@ -1,4 +1,4 @@
-package com.ghanshyam.blogera;
+package com.ghanshyam.blogera.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

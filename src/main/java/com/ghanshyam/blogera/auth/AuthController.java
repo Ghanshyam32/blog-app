@@ -1,5 +1,7 @@
-package com.ghanshyam.blogera;
+package com.ghanshyam.blogera.auth;
 
+import com.ghanshyam.blogera.user.AppUser;
+import com.ghanshyam.blogera.user.AppUserRepository;
 import com.ghanshyam.blogera.dto.LoginRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;

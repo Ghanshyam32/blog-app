@@ -1,11 +1,12 @@
-package com.ghanshyam.blogera;
+package com.ghanshyam.blogera.auth;
 
+import com.ghanshyam.blogera.user.AppUser;
+import com.ghanshyam.blogera.user.AppUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -28,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer")) {
-            String token = authHeader.substring(7);
+            String token = authHeader.substring(7); // remove "Bearer "
             String username = jwtUtil.extractUsername(token);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

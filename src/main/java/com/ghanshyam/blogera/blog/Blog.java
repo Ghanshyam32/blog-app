@@ -1,9 +1,8 @@
 package com.ghanshyam.blogera.blog;
 
+import com.ghanshyam.blogera.user.AppUser;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -15,11 +14,13 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blog_seq")
     @SequenceGenerator(name = "blog_seq", sequenceName = "blog_sequence", allocationSize = 1)
     private long id;
-    private String author;
+
+    @ManyToOne
+    private AppUser author;
     private String title;
     private String content;
 
-    public Blog(long id, String author, String title, String content) {
+    public Blog(long id, AppUser author, String title, String content) {
         this.id = id;
         this.author = author;
         this.title = title;

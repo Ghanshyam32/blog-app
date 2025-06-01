@@ -2,7 +2,11 @@ package com.ghanshyam.blogera.service;
 
 import com.ghanshyam.blogera.Repository.BlogRepository;
 import com.ghanshyam.blogera.blog.Blog;
+import com.ghanshyam.blogera.dto.PostRequest;
+import com.ghanshyam.blogera.dto.PostResponse;
+import com.ghanshyam.blogera.user.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -23,13 +27,25 @@ public class BlogService {
         return blogRepository.findById(id);
     }
 
-    public String postBlog(Blog blog) {
+    public void createBlog(PostRequest postRequest) {
+        Blog blog = new Blog();
+        blog.setTitle(postRequest.getTitle());
+        blog.setContent(postRequest.getContent());
+
+        AppUser user = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        blog.setAuthor(user); //fetch actual user form JWT
         blogRepository.save(blog);
-        return "Your blog is successfully published!";
     }
 
-    public List<Blog> getAllBlog() {
-        return blogRepository.findAll();
+    public List<PostResponse> getAllBlog() {
+        return blogRepository.findAll().stream().map(blog -> {
+            PostResponse response = new PostResponse();
+            response.setId(blog.getId());
+            response.setTitle(blog.getTitle());
+            response.setContent(blog.getContent());
+            response.setAuthorUsername(blog.getAuthor().getUsername());
+            return response;
+        }).toList();
     }
 
     public void deleteBlog(long id) {

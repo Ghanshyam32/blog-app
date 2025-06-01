@@ -1,4 +1,4 @@
-package com.ghanshyam.blogera;
+package com.ghanshyam.blogera.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
