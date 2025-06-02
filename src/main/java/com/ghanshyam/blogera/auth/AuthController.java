@@ -1,13 +1,19 @@
 package com.ghanshyam.blogera.auth;
 
+import com.ghanshyam.blogera.dto.SignUpRequest;
 import com.ghanshyam.blogera.user.AppUser;
 import com.ghanshyam.blogera.user.AppUserRepository;
 import com.ghanshyam.blogera.dto.LoginRequest;
+import com.ghanshyam.blogera.user.Role;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
@@ -34,6 +40,22 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(appUser);
         return new JwtResponse(jwtUtil.generateToken(appUser));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+        if (appUserRepository.findByUsername(signUpRequest.getUsername()).isPresent()) {
+            return ResponseEntity.badRequest().body("Username is already taken");
+        }
+
+        AppUser appUser = new AppUser();
+        appUser.setUsername(signUpRequest.getUsername());
+//        appUser.setPassword(signUpRequest.getPassword());
+        appUser.setPassword(new BCryptPasswordEncoder().encode(signUpRequest.getPassword()));
+        appUser.setRoles(Set.of(Role.ROLE_USER));
+
+        appUserRepository.save(appUser);
+        return ResponseEntity.ok("User is registered successfully");
     }
 }
 

@@ -49,6 +49,5 @@ public class BlogController {
             return new ResponseEntity<>("Your blog is successfully updated", HttpStatus.OK);
         }
         return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
-
     }
 }

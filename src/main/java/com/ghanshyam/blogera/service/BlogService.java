@@ -1,6 +1,7 @@
 package com.ghanshyam.blogera.service;
 
 import com.ghanshyam.blogera.Repository.BlogRepository;
+import com.ghanshyam.blogera.UnauthorizedAccessException;
 import com.ghanshyam.blogera.blog.Blog;
 import com.ghanshyam.blogera.dto.PostRequest;
 import com.ghanshyam.blogera.dto.PostResponse;
@@ -49,6 +50,13 @@ public class BlogService {
     }
 
     public void deleteBlog(long id) {
+        AppUser user = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Blog blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
+
+        if (!blog.getAuthor().getUsername().equals(user.getUsername())) {
+            throw new UnauthorizedAccessException("You're not allowed to delete the post!");
+        }
         blogRepository.deleteById(id);
     }
 
