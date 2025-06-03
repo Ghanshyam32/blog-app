@@ -44,10 +44,13 @@ public class BlogController {
 
     @PutMapping("/blogs/update/{id}")
     public ResponseEntity<String> updateBlog(@PathVariable long id, @RequestBody Blog blog) {
-        boolean blogUpdated = blogService.update(id, blog);
-        if (blogUpdated) {
-            return new ResponseEntity<>("Your blog is successfully updated", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
+        blogService.update(id, blog);
+
+        return new ResponseEntity<>("Blog is updated", HttpStatus.OK);
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<List<PostResponse>> getBlogsByUsername(@PathVariable String username){
+        return ResponseEntity.ok(blogService.getBlogByusername(username));
     }
 }

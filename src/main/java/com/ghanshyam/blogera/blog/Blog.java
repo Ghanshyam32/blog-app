@@ -4,6 +4,9 @@ import com.ghanshyam.blogera.user.AppUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,6 +23,9 @@ public class Blog {
     private String title;
     private String content;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    
     public Blog(long id, AppUser author, String title, String content) {
         this.id = id;
         this.author = author;

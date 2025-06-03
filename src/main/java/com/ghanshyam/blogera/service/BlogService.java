@@ -44,6 +44,7 @@ public class BlogService {
             response.setId(blog.getId());
             response.setTitle(blog.getTitle());
             response.setContent(blog.getContent());
+            response.setCreatedAt(blog.getCreatedAt());
             response.setAuthorUsername(blog.getAuthor().getUsername());
             return response;
         }).toList();
@@ -60,17 +61,27 @@ public class BlogService {
         blogRepository.deleteById(id);
     }
 
-    public boolean update(long id, Blog updatedBlog) {
-        Optional<Blog> blog1 = blogRepository.findById(id);
-        if (blog1.isPresent()) {
-            Blog blog = blog1.get();
-            blog.setTitle(updatedBlog.getTitle());
-            blog.setContent(updatedBlog.getContent());
-            blog.setAuthor(updatedBlog.getAuthor());
-            blogRepository.save(blog);
-            return true;
+    public void update(long id, Blog updatedBlog) {
+        AppUser user = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Blog blog1 = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
+        if (!blog1.getAuthor().getUsername().equals(user.getUsername())) {
+            throw new UnauthorizedAccessException("You're not allowed to update the post!");
         }
-        return false;
+        blog1.setTitle(updatedBlog.getTitle());
+        blog1.setContent(updatedBlog.getContent());
+        blogRepository.save(blog1);
+    }
+
+    public List<PostResponse> getBlogByusername(String username) {
+        List<Blog> blogs = blogRepository.findByAuthor_Username(username);
+        return blogs.stream().map(blog -> {
+            PostResponse postResponse = new PostResponse();
+            postResponse.setId(blog.getId());
+            postResponse.setTitle(blog.getTitle());
+            postResponse.setContent(blog.getContent());
+            postResponse.setAuthorUsername(blog.getAuthor().getUsername());
+            return postResponse;
+        }).toList();
     }
 
 }
