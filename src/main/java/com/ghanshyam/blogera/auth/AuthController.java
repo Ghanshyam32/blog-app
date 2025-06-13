@@ -1,10 +1,14 @@
 package com.ghanshyam.blogera.auth;
 
+import com.ghanshyam.blogera.Repository.TokenBlacklistRepository;
 import com.ghanshyam.blogera.dto.SignUpRequest;
 import com.ghanshyam.blogera.user.AppUser;
 import com.ghanshyam.blogera.user.AppUserRepository;
 import com.ghanshyam.blogera.dto.LoginRequest;
 import com.ghanshyam.blogera.user.Role;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +26,9 @@ public class AuthController {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+    @Autowired
+    private TokenBlacklistRepository tokenBlacklistRepository;
 
     public AuthController(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.appUserRepository = appUserRepository;
@@ -57,5 +64,23 @@ public class AuthController {
         appUserRepository.save(appUser);
         return ResponseEntity.ok("User is registered successfully");
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer")) {
+            String token = authHeader.substring(7);
+
+            if (!tokenBlacklistRepository.existsByToken(token)) {
+                BlacklistedToken blacklistedToken = new BlacklistedToken();
+                blacklistedToken.setToken(token);
+                tokenBlacklistRepository.save(blacklistedToken);
+            }
+            return ResponseEntity.ok("Successfully logged out");
+        }
+        return ResponseEntity.badRequest().body("No token found in authorization header");
+    }
+
 }
 
