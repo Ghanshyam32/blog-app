@@ -107,13 +107,6 @@ Blogera is a lightweight, Spring Boot-based blogging REST API with JWT authentic
 - **Filter**: `JwtAuthenticationFilter.java` checks tokens against the blacklist before processing requests.
 - **Endpoint**: `/auth/logout` extracts the JWT from the `Authorization` header and adds it to the blacklist.
 
-### Latest Blogs
-- Implemented in the blog controller to fetch recent posts.
-- Returns a list of the latest blog posts for display.
-
-### Markdown Support
-- Blog content is stored as plain text with Markdown syntax.
-- The API accepts raw Markdown in the request body for `/blogs/post` and `/blogs/update/{id}`.
 
 ## Testing the Flow
 
@@ -121,7 +114,6 @@ Blogera is a lightweight, Spring Boot-based blogging REST API with JWT authentic
 2. **Create Post**: Use the token in the `Authorization` header to create a post via `POST /blogs/post`.
 3. **Logout**: Send a `POST` request to `/auth/logout` with the token to blacklist it.
 4. **Test Blacklist**: Attempt to use the blacklisted token for `POST /blogs/post`. It should fail with a `401 Unauthorized` response.
-5. **Latest Blogs**: Use `GET /blogs/latest` to retrieve the most recent posts.
 
 ## Tech Stack
 
