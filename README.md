@@ -9,7 +9,6 @@ Blogera is a lightweight, Spring Boot-based blogging REST API with JWT authentic
 - **Blog Creation**: Authenticated users can create blog posts with basic Markdown support.
 - **Author-Specific Control**: Only the post author can edit or delete their blogs.
 - **User Blogs**: View all blogs by a specific user via `/{username}`.
-- **Latest Blogs**: Retrieve the most recent blog posts.
 - **Persistent Storage**: Uses PostgreSQL for reliable data storage.
 - **Role-Based Access**: Ensures secure access to endpoints with appropriate permissions.
 
@@ -21,7 +20,6 @@ Blogera is a lightweight, Spring Boot-based blogging REST API with JWT authentic
 | `POST` | `/auth/login`               | Log in and receive a JWT token                     |
 | `POST` | `/auth/logout`              | Log out and blacklist the JWT token                |
 | `GET`  | `/blogs`                    | Retrieve all blog posts                            |
-| `GET`  | `/blogs/latest`             | Retrieve the latest blog posts                     |
 | `POST` | `/blogs/post`               | Create a new blog post (requires JWT, USER role)   |
 | `PUT`  | `/blogs/update/{id}`        | Update a blog post (requires JWT, author only)     |
 | `DELETE` | `/blogs/delete/{id}`        | Delete a blog post (requires JWT, author only)     |
@@ -90,7 +88,7 @@ Blogera is a lightweight, Spring Boot-based blogging REST API with JWT authentic
 4. **Blog Management**:
    - Create blog posts with basic Markdown formatting (e.g., headers, bold, italic) using the `/blogs/post` endpoint.
    - Only the author of a blog post can modify or delete it via `/blogs/update/{id}` or `/blogs/delete/{id}`.
-   - View all blogs (`/blogs`), the latest blogs (`/blogs/latest`), or blogs by a specific user (`/{username}`).
+   - View all blogs (`/blogs`), or blogs by a specific user (`/{username}`).
 
 ## New Functionalities
 
