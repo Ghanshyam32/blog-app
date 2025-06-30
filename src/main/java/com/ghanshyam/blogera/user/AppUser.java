@@ -36,7 +36,6 @@ public class AppUser implements UserDetails {
                 .collect(Collectors.toSet());
     }
 
-    // These can be tweaked depending on your use case
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }

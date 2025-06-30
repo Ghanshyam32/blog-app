@@ -1,5 +1,6 @@
 package com.ghanshyam.blogera.blog;
 
+import com.ghanshyam.blogera.dto.BlogDto;
 import com.ghanshyam.blogera.dto.PostRequest;
 import com.ghanshyam.blogera.dto.PostResponse;
 import com.ghanshyam.blogera.service.BlogService;
@@ -20,14 +21,23 @@ public class BlogController {
     BlogService blogService;
 
     @GetMapping("/blogs")
-    public List<PostResponse> findAll() {
-        return blogService.getAllBlog();
+    public ResponseEntity<List<PostResponse>> getAllBlogs() {
+        return ResponseEntity.ok(blogService.getAllBlog());  // already DTO
     }
 
+    //    @GetMapping("/blogs/{id}")
+//    public Optional<Blog> getBlog(@PathVariable long id) {
+//        return blogService.getBlogById(id);
+//    }
     @GetMapping("/blogs/{id}")
-    public Optional<Blog> getBlog(@PathVariable long id) {
-        return blogService.getBlogById(id);
+    public ResponseEntity<PostResponse> getBlogById(@PathVariable Long id) {
+        Blog blog = blogService.getBlogById(id)
+                .orElseThrow(() -> new RuntimeException("Blog not found"));
+
+        return ResponseEntity.ok(new PostResponse(blog));
     }
+
+
 
     @PostMapping("/blogs/post")
     @PreAuthorize("hasRole('USER')")
@@ -50,7 +60,7 @@ public class BlogController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<List<PostResponse>> getBlogsByUsername(@PathVariable String username){
+    public ResponseEntity<List<PostResponse>> getBlogsByUsername(@PathVariable String username) {
         return ResponseEntity.ok(blogService.getBlogByusername(username));
     }
 }
