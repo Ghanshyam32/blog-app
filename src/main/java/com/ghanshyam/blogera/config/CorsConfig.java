@@ -18,7 +18,7 @@ public class CorsConfig {
                             "http://localhost:3000", // frontend dev
                             "https://studio--studio-1346424115-35dc3.us-central1.hosted.app" // production domain
                         )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // Added PATCH
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
