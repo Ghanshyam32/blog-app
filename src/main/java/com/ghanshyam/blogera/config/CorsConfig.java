@@ -20,7 +20,9 @@ public class CorsConfig {
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // Added PATCH
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .exposedHeaders("Authorization", "Content-Type") // Newly added for completeness
+                        .allowCredentials(true)
+                        .maxAge(3600); // Added cache duration for preflight requests
             }
         };
     }
